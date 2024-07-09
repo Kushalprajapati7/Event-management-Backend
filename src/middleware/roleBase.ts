@@ -3,10 +3,9 @@ import CustomRequest from '../types/customRequest';
 
 const authorize = (roles: string[] = []) => {
     return (req: Request, res: Response, next: NextFunction) => {
-        console.log((req as CustomRequest).userId, (req as CustomRequest).role);
         const userId = (req as CustomRequest).userId;
         const role = (req as CustomRequest).role;
-
+        
         if (!userId || !role) {
             return res.status(401).send({ message: 'Access denied' });
         }

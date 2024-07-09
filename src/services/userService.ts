@@ -19,28 +19,23 @@ class UserServices {
 
         let user;
         user = await User.findOne({ email: email })
-        console.log(user, "User");
 
         if (!user) {
             throw new Error(`User with Email ${email} not found`);
         }
 
         const pass = await bcrypt.compare(password, user.password);
-        // console.log(pass);
-        
         if (!pass) {
             throw new Error(`Incorrect password`);
         }
         const role = user.role;
         const userName = user.username;
-        console.log(role)
         const token = JwtUtills.generateToken(user.id, user.role);
         const userId = user._id;
-        return { token, role, userName,userId };;
+        return { token, role, userName, userId };
     }
 
     public async allUser(): Promise<IUser[]> {
-        // const user = await User.find()
         const user = User.aggregate(
             [
                 {
@@ -58,6 +53,25 @@ class UserServices {
     public async deleteUser(id: string): Promise<void> {
         await User.findByIdAndDelete(id);
     }
+
+    public async byIdUser(id: string): Promise<IUser | null> {
+        const user = await User.findById(id);
+        return user
+    }
+
+    public async updateUser(userId: string, userData: Partial<IUser>): Promise<IUser | null> {
+        if (userData.password) {
+            userData.password = await bcrypt.hash(userData.password, 10);
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(userId, userData, { new: true });
+        if (!updatedUser) {
+            throw new Error(`User not found`);
+        }
+
+        return updatedUser;
+    };
+
 
 
 }

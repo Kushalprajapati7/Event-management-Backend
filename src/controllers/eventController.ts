@@ -7,14 +7,11 @@ class EventController {
     public async createEvent(req: Request, res: Response): Promise<void> {
         try {
             const newEvent = req.body;
-            console.log(newEvent, "newEvent");
-
             newEvent.createdBy = (req as CustomRequest).userId;
             if (!newEvent.createdBy) {
                 throw new Error('Event Creator not found!')
             }
             const event = await eventService.createEvent(newEvent);
-            console.log(event, "event");
 
             res.json(event);
         } catch (error: any) {

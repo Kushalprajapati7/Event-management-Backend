@@ -18,7 +18,6 @@ class UserController {
         try {
             const { email, password } = req.body;
             const response = await userServices.loginUser(email, password);
-            console.log(response);
             res.json({ response, message: `Login Successfully` })
         } catch (error: any) {
             res.status(500).json({
@@ -54,6 +53,31 @@ class UserController {
             })
         }
     }
+    public async getUserById(req: Request, res: Response): Promise<void> {
+        try {
+
+            const userId = req.params.id;
+            const user = await userServices.byIdUser(userId)
+            res.json(user)
+        } catch (error: any) {
+            res.status(500).json({
+                message: error.message
+            })
+        }
+    }
+
+    public async updateUser(req: Request, res: Response) {
+        try {
+            const userId = req.params.id;
+            const userData = req.body;
+            const updatedUser = await userServices.updateUser(userId, userData);
+            res.status(200).json(updatedUser);
+        } catch (error: any) {
+            res.status(500).json({
+                message: error.message
+            })
+        }
+    };
 
 
 }

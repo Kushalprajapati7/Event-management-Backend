@@ -1,13 +1,10 @@
 import express, { Request, Response } from "express";
 import connectDB from "./config/database";
 import * as dotenv from 'dotenv';
-import path from 'path';
 import cors from 'cors';
 import userRoutes from './routes/userRoutes'
 import eventRoutes from './routes/eventRoutes'
-
 dotenv.config();
-
 
 const app = express();
 const port = 3000;
